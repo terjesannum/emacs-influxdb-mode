@@ -15,11 +15,12 @@
 (defun influx ()
   "InfluxDB cli"
   (interactive)
-  (unless (comint-check-proc "*influx*")
-    (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-database" influxdb-database "-precision" influxdb-precision))
-  (switch-to-buffer "*influx*")
-  (setq comint-input-ring-file-name influxdb-history-file-name)
-  (comint-read-input-ring)
-  (influxdb-mode))
+  (let ((default-directory "~"))
+    (unless (comint-check-proc "*influx*")
+      (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-database" influxdb-database "-precision" influxdb-precision))
+    (switch-to-buffer "*influx*")
+    (setq comint-input-ring-file-name influxdb-history-file-name)
+    (comint-read-input-ring)
+    (influxdb-mode)))
 
 (provide 'influxdb-mode)
