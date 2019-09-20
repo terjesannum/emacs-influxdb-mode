@@ -19,8 +19,15 @@
     (unless (comint-check-proc "*influx*")
       (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-database" influxdb-database "-precision" influxdb-precision))
     (switch-to-buffer "*influx*")
+    (setq comint-input-ring (make-ring comint-input-ring-size))
     (setq comint-input-ring-file-name influxdb-history-file-name)
-    (comint-read-input-ring)
+    (comint-read-input-ring 'silent)
+    (set-process-sentinel (get-buffer-process (current-buffer))
+                          'influx-process-kill-buffer-sentinel)
     (influxdb-mode)))
+
+(defun influx-process-kill-buffer-sentinel (process state)
+  (message "influx(%s): %s" (buffer-name) state)
+  (kill-buffer (current-buffer)))
 
 (provide 'influxdb-mode)
