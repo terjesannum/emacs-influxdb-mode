@@ -1,6 +1,7 @@
 (require 'comint)
 
 (defvar influxdb-host (or (getenv "INFLUX_HOST") "localhost"))
+(defvar influxdb-port 8086)
 (defvar influxdb-database (or (getenv "INFLUX_DATABASE") "_internal"))
 (defvar influxdb-precision "rfc3339")
 (defvar influxdb-cli "/usr/bin/influx")
@@ -17,7 +18,7 @@
   (interactive)
   (let ((default-directory "~"))
     (unless (comint-check-proc "*influx*")
-      (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-database" influxdb-database "-precision" influxdb-precision))
+      (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-port" (format "%s" influxdb-port) "-database" influxdb-database "-precision" influxdb-precision))
     (switch-to-buffer "*influx*")
     (setq comint-input-ring (make-ring comint-input-ring-size))
     (setq comint-input-ring-file-name influxdb-history-file-name)
