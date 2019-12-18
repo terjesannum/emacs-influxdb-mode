@@ -42,7 +42,7 @@
   (run-hooks 'influxdb-mode-hook))
 
 (defun influx ()
-  "InfluxDB cli"
+  "Start InfluxDB CLI."
   (interactive)
   (let ((default-directory "~"))
     (unless (comint-check-proc "*influx*")
@@ -56,8 +56,10 @@
     (influxdb-mode)))
 
 (defun influx-process-kill-buffer-sentinel (process state)
-  (message "influx(%s): %s" (buffer-name) state)
-  (kill-buffer (current-buffer)))
+  (message "influx(%s): %s" process state)
+  (let ((buffer (process-buffer process)))
+    (when buffer
+      (kill-buffer buffer))))
 
 (provide 'influxdb-mode)
 
