@@ -29,7 +29,7 @@
 (require 'comint)
 
 (defvar influxdb-host (or (getenv "INFLUX_HOST") "localhost"))
-(defvar influxdb-port 8086)
+(defvar influxdb-port (or (getenv "INFLUX_PORT") 8086))
 (defvar influxdb-database (or (getenv "INFLUX_DATABASE") "_internal"))
 (defvar influxdb-precision "rfc3339")
 (defvar influxdb-cli "/usr/bin/influx")
