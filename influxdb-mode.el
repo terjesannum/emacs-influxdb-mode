@@ -33,6 +33,7 @@
 (defvar influxdb-database (or (getenv "INFLUX_DATABASE") "_internal"))
 (defvar influxdb-precision "rfc3339")
 (defvar influxdb-cli "/usr/bin/influx")
+(defvar influxdb-directory nil "Directory where influx cli is started. Set this if you want to always start the influx cli from a specific directory.")
 (defvar influxdb-mode-hook nil)
 (defvar influxdb-history-file-name "~/.influx_history")
 
@@ -44,7 +45,7 @@
 (defun influx ()
   "Start InfluxDB CLI."
   (interactive)
-  (let ((default-directory "~"))
+  (let ((default-directory (or influxdb-directory default-directory)))
     (unless (comint-check-proc "*influx*")
       (make-comint "influx" influxdb-cli nil "-host" influxdb-host "-port" (format "%s" influxdb-port) "-database" influxdb-database "-precision" influxdb-precision))
     (switch-to-buffer "*influx*")
